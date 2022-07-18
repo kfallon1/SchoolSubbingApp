@@ -2,14 +2,29 @@
 const mongoose = require('mongoose');
 
 //This is the schema/model layer to create an object pretty sure
+//Each schema links to a MongoDB collection 
 const teacherSchema = mongoose.Schema ({
-        firstName: {
+        name: {
         type:String, 
         required: true
-    },  //this is the function to make first name required, throws JSON error now
+    },  //this is the function to make name required, throws JSON error now
 
-        lastName: String,
-        image: String
+    image: {
+        type: String,
+        default: ''
+    },
+
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TeacherCategory',
+        required:false
+    }, //come back to this OBJECT ID? Link to teacherCategory
+
+    isAvailable: {
+        type: Boolean,
+        default: false,
+    }
+
     })
 
  exports.Teacher = mongoose.model('Teacher', teacherSchema);
