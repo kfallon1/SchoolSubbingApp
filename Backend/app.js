@@ -14,6 +14,7 @@ app.use(morgan('tiny'));  //Morgan logs requests coming from Front End in termin
 
 //declaring the router
 const teachersRouter = require('./routers/teachers');
+const teacherCategoriesRouter = require ('./routers/teacherCategories'); //Declare each router or else 404 error
 
 
 
@@ -22,6 +23,8 @@ const teachersRouter = require('./routers/teachers');
 const api = process.env.API_URL; //This use the env file again mapping...
 
 app.use (`${api}/teachers`, teachersRouter)
+app.use (`${api}/teachercategories`, teacherCategoriesRouter) //MAKE SURE to do this part for the different mapping requirements!!
+
 
 
 
