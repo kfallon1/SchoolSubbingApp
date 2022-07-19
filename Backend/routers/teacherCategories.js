@@ -1,6 +1,6 @@
 const {TeacherCategory} = require('../models/teacherCategory'); //Takes the teacherCategory from Model class and used here as TeacherCategory
 const express = require('express');
-const { Teacher } = require('../models/teacher');
+//const { Teacher } = require('../models/teacher');
 const router = express.Router();
 
 //GET ALL METHOD (SEARCH/FIND/READ)
@@ -75,7 +75,7 @@ teacherCategory.save().then ((createdteacherCategory => {
 //DELETE METHOD (DELETE)
 router.delete('/:id', async (req,res)=>{
     //url will be api/v1/teachercategories/IDwhichWillBeDeleted, (working correctly)
-//this doesn't use async and await it uses promise with .then which different from the post method above
+    //this doesn't use async and await it uses promise with .then which different from the post method above
     //find by id, params finds id from front end and then returns a teacherCateogry Document/Object (=>) 
     TeacherCategory.findByIdAndRemove(req.params.id).then (teacherCategory => {
         if(teacherCategory) {

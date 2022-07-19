@@ -14,15 +14,15 @@ const teacherSchema = mongoose.Schema ({
         default: ''
     },
 
-    category: {
+    teacherCategory: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'TeacherCategory',
-        required:false
+        required:true
     }, //come back to this OBJECT ID? Link to teacherCategory
 
     isAvailable: {
         type: Boolean,
-        default: false,
+        default: true,
     }
 
     })

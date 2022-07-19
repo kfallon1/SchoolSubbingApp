@@ -5,15 +5,12 @@ const teacherCategorySchema = mongoose.Schema({
         type:String, 
         required: true
     },
-
     icon: {
         type:String, 
     },
-
     colour: {
         type:String, 
     }
-
 })
 
 exports.TeacherCategory = mongoose.model('TeacherCategory', teacherCategorySchema);
