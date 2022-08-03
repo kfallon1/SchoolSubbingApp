@@ -3,6 +3,42 @@ const express= require ('express'); //express used to build application
 const {TeacherCategory } = require('../models/teacherCategory'); //import teacher Categoires 
 const router = express.Router(); //router part of express
 const mongoose = require('mongoose'); //this is needed for the isValivObjectID method
+const multer = require('multer');   //this is the library to allow images be uploaded 
+
+const FILE_TYPE_MAP = {             //This ensure only jpg or png files only for images
+'image/png' : 'png',                //done like this for MIME type: (image/png)
+'image/jpeg': 'jpeg',
+'image/jpg': 'jpg '
+}
+
+
+//disk storage works with the file name and stores it properly in backend. Taken from Multer Documentation
+//renames a picture to unique name and stores it in server
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) { //this is control of the destination of file name
+        const isValid = FILE_TYPE_MAP[file.mimetype];   //checking if right file type and not pdf, doc, etc. 
+        let uploadError = new Error('invalid image type');  //error if the image type isn't what set out above
+
+        if (isValid) {
+            uploadError = null;     //if file is valid, no error and use in callback below
+        }
+        cb(uploadError, 'public/uploads');  // destination is here and is folder created as part of the project
+    },
+    filename: function (req, file, cb) {   //this is control of the filename: request, the file and callback
+        const fileName = file.originalname.split(' ').join('-');    //const of original file name and replace spaces woth -.
+        const extension = FILE_TYPE_MAP[file.mimetype];             //gets the value of the file types we have set above 'jpg, etc.
+        cb(null, `${fileName}-${Date.now()}.${extension}`); //date now is timestap and unique no. to create files
+    },
+});
+
+const uploadOptions = multer({ storage: storage }); //this is the created image/file to be used in post request for a teacher
+
+
+
+
+
+
+
 
 //APIs: get, post, etc.
 //initial route for the application takes 2 parameters. 1st one is route, 2nd is callback that is sent to client
@@ -16,7 +52,7 @@ router.get(`/`, async (req, res) => {
 
 //await and asynce wait for list to be built before sending to Front end same function as below but less code (Promise Function/Do then in the post)
     if (!teacherList) {
-        res.status(500).json({success:false})
+        res.status(500).json({success:false}) 
     }
     res.send(teacherList); //response here sends teacher to front end
 } )
@@ -81,16 +117,22 @@ router.get(`/`, async (req, res) => {
     res.send(teacherList);
 });
 
-//POST (method for creating a new Teacher)
-router.post(`/`, async (req, res) => {
+//POST (method for creating a new Teacher), uploadOptions is a const above gets the image 
+router.post(`/`,uploadOptions.single('image'), async (req, res) => {    
 
 
     const teacherCategory = await TeacherCategory.findById(req.body.teacherCategory); //THIS LINE NOT WORKING??? It has worked see EndaFallon and Pat Fallon. Works but crashes the app now
     if (!teacherCategory) return res.status(400).send('Invalid Teacher Category');
 
+    const fileName = req.file.filename; //comes from storage method where we set up the filename
+    //findName finds and stores full image name as a String from above methods, rem unique by date.now. Combine this with basePath in the method below
+
+    const basePath = `${req.protocol}://${req.get('host')}//public/upload`;     //this is needed so have full string/path before the image name so don't just get the images name, full path will show it
+    //basePath finds and stores this part: http://localhost:3000:public/uploads combined with file name above in the method
+   
     const teacher = new Teacher({
         name: req.body.name,
-        image: req.body.image,
+        image: `${basePath}${fileName}`,        //this gives full: http://localhost:3000:public/uploads/image1234
         teacherCategory: req.body.teacherCategory,
         isAvailable: req.body.isAvailable,
     }) ;
@@ -104,20 +146,31 @@ router.post(`/`, async (req, res) => {
 })
 
 //PUT METHOD (UPDATE a TEACHER)
-router.put('/:id',async (req, res)=> {
+router.put('/:id',uploadOptions.single('image'), async (req, res)=> {
     if (!mongoose.isValidObjectId(req.params.id)) {         //This method throws error if the id passed is not valid, guess will need in all methods using ID
         return res.status(400).send('Invalid Teacher ID')
     }
     const teacherCategory = await TeacherCategory.findById(req.body.teacherCategory); //THIS LINE NOT WORKING??? It has worked see EndaFallon and Pat Fallon. Works but crashes the app now
     if (!teacherCategory) return res.status(400).send('Invalid Teacher Category');
 
-    const teacher = await Teacher.findByIdAndUpdate(
+    //taken from above post method, if replaces it with new image and else keeps the old image 
+    const file = req.file;
+    let imagepath;
 
-        
-        req.params.id,
+    if (file) {
+        const fileName = file.filename;
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+        imagepath = `${basePath}${fileName}`;
+    } else {
+        imagepath = teacher.image;
+    }
+
+
+    const teacher = await Teacher.findByIdAndUpdate(
+         req.params.id,
         {
             name: req.body.name,
-        image: req.body.image,
+        image: imagepath, //const from above replacing the image or keeping old one
         teacherCategory: req.body.teacherCategory,
         isAvailable: req.body.isAvailable,
         },
@@ -146,7 +199,6 @@ router.delete('/:id', async (req,res)=>{
 
 
     })
-
 
 
 

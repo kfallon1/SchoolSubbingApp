@@ -65,23 +65,19 @@ router.post('/login', async(req, res)=> {
         const token = jwt.sign ( //delcare the token
         {
             schoolID: school.id, //pass an object 
-            isAdmin: school.isAdmin
-            
+            isAdmin: school.isAdmin   
         },
         secret, //not sure exactly defined in method and imported from env file 
         //secret is based on a string to create a token, when a token is passed needs to be compared to secret
         { 
             expiresIn: '1d' //sets how long token is valid for
-        }
-        )
+        })
 
         res.status(200).send( {
             school: school.email, token: token
-        }   
-        )
+        }   )
     } else {
-        res.status(400).send('password is wrong')
-    }
+        res.status(400).send('password is wrong')}
 
    // return res.status(200).send(school); //First find if there is an email present 
 })

@@ -13,4 +13,14 @@ const teacherCategorySchema = mongoose.Schema({
     }
 })
 
+teacherCategorySchema.virtual('id').get (function () {
+    return this._id.toHexString();
+     })
+
+//Enable function when sending data as JSON object virtuals enabled
+teacherCategorySchema.set('toJSON', {
+virtuals:true,
+})
+
+
 exports.TeacherCategory = mongoose.model('TeacherCategory', teacherCategorySchema);

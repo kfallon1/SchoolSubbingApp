@@ -19,11 +19,12 @@ function authJwt() {
     }).unless({                  //unless excludes certain paths from needing a token such as the login! Without this need a token to get a token not logical!
         path: [                  //path specifies all APIs want to be excluded from authentication
 
-        {url: /\/api\/v1\/teachers(.*)/ , methods: ['GET', 'OPTIONS'] }, //Uses regular expressions rather than indiviudal list of every api for teachers which would be huge....
+        {url: /\/public\/uploads(.*)/ , methods: ['GET', 'OPTIONS'] }, //Uses regular expressions rather than indiviudal list of every api for teachers which would be huge....
         {url: /\/api\/v1\/teachercategories(.*)/ , methods: ['GET', 'OPTIONS'] },
          //Accepts and object and the required method to exclude....As of now this lets a list of all teachers be seen for all but not post.
         //RETURN/ REVIEW THIS PART WITHIN OWN PROJECT FUNCTIONALITY rem url also needs to be exact including with/without capitals
-
+        
+        {url: /\/api\/v1\/teachers(.*)/ , methods: ['GET', 'OPTIONS'] },//this opens up the image gallery for images to be seen as locked otherwise
         
     `${api}/schools/login`,         //Within a school/user context these are the only 2 APIs we want open without being logged in/authenticated
     `${api}/schools/register` 
@@ -43,5 +44,3 @@ done();                 //go ahead if is admin
 
 module.exports = authJwt; //this exports it to be used in app.js 
 
-//Seems to be working now but lost then token generated from Castelgar and haven't any access.....
-//Comment out working code and rever to get token and then see if works from there. Defo progress
