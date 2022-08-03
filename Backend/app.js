@@ -17,7 +17,7 @@ app.use(morgan('tiny'));  //Morgan logs requests coming from Front End in termin
 app.use(authJwt());     //This checks if the user has a token thus 'protecting' APIs only allowing authenticated users..
 //function to handle ALL api errors for user and front end
 app.use(errorHandler); 
-app.use('/public/uploads', express.static(__dirname + '/public/uploads')) //changes this to a static path which allows browser dsiplay image
+app.use('/public/uploads', express.static(__dirname + '/public/uploads')); //changes this to a static path which allows browser dsiplay image
  
 
 //declaring the router 
