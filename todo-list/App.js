@@ -1,16 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, {userState} from 'react';     //userState is a hook
 import { StyleSheet, Text, View } from 'react-native';
 
-//Screens
-import TeacherContainer from './Screens/Teachers/TeacherContainer';
+import TodoList from './Components/TodoList'; //imported from components and used below as a base screen I think?
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <TeacherContainer />
+      <TodoList/> 
     </View>
-  );
+  );  
 }
 
 const styles = StyleSheet.create({

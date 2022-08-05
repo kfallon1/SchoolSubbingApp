@@ -1,0 +1,24 @@
+[
+  {
+    "_id": "62ea96ed034c07eb89fce726",
+    "name": "Tom Fallon",
+    "image": "http://localhost:3000/public/uploads/tommy.jpg-1659543125861.jpeg",
+    "teacherCategory": "62d66173bbbc15058e6ff881",
+    "isAvailable": true
+  },
+  {
+    "_id": "62d7da080f1db42318deaf82",
+    "name": "Joe Fallon",
+    "image": "Joe",
+    "teacherCategory": "62d66173bbbc15058e6ff881",
+    "isAvailable": true
+  },
+
+  {
+    "_id": "62d6d2dd709faec4a94b408a",
+    "name": "Pat Fallon",
+    "image": "Joe",
+    "teacherCategory": "62d66173bbbc15058e6ff881",
+    "isAvailable": true
+  }
+]
