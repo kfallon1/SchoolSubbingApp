@@ -4,10 +4,12 @@ import { StyleSheet, Text, View } from 'react-native';
 
 //Screens
 import TeacherContainer from './Screens/Teachers/TeacherContainer';
+import  Header  from './Shared/Header'; //Used below to maintain the same header for the whole application
 
 export default function App() {
   return (
     <View style={styles.container}>
+      <Header /> 
       <TeacherContainer />
     </View>
   );
