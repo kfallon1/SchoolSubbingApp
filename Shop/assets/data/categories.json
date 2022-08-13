@@ -1,0 +1,18 @@
+[
+  {
+    "_id": {
+      "$oid": "62d66173bbbc15058e6ff881"
+    },
+    "name": "Student Teacher",
+    "__v": 0
+  },
+
+  {
+    "_id": {
+      "$oid": "62e12ba342a3d2dcb2843039"
+    },
+    "name": "Registered Teaching Council Member",
+    "__v": 0
+  }
+
+]

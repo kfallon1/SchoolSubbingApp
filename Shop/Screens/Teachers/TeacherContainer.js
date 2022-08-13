@@ -5,14 +5,18 @@ import {
   ActivityIndicator,
   FlatList,
   Dimensions,
+  ScrollView,
 } from "react-native"; //FlatList used to render list
 import { Container, Header, Icon, Item, Input, Text } from "native-base";
 
 import TeacherList from "./TeacherList";
-import SearchedTeacher from "./SearchedTeachers"; 
+import SearchedTeacher from "./SearchedTeachers";
+import Banner from "../../Shared/Banner"; //WORKS BUT LOSE THE TEACHER LIST WHEN I USE IT
+import CategoryFilter from "./CategoryFilter"; //NOT WORKING EITHER? RENDER METHOD/IMPORT ERROR?
 
 //This imports the teachers/data from the JSON file in assets
 const data = require("../../assets/data/teachers.json");
+const teacherCategories = require("../../assets/data/categories.json"); //categories import
 
 var { height } = Dimensions.get("window");
 
@@ -22,17 +26,28 @@ const TeacherContainer = () => {
   const [teachers, setTeachers] = useState([]); //Setting the state of the teachers and putting them in an array
   const [teachersFiltered, setTeachersFiltered] = useState([]); //Functionality for search teacher This created before TeacherSearched.js not sure about useState() think its created here to be used as props in const
   const [focus, setFocus] = useState(); //event for when we focus the input
+  const [categories, setCategories] = useState([]); //categories variable defined and a use state
+  const [teachersCtg, setTeachersCtg] = useState([]); //store teachers when filtering by category
+  const [active, setActive] = useState(); //activate state to show certain categories
+  const [initialState, setInitialState] = useState([]); //inital state/set up when renders first time/ all categories
 
   //Use effect is the function to fetch the data/teachers from the file which is called data
   useEffect(() => {
     setTeachers(data);
     setTeachersFiltered(data);
     setFocus(false); //initial focus state is false so only used when search occurs
+    setCategories(teacherCategories); //when renders use the categories from categoriy file above
+    setActive(-1); //not sure why or what this is
+    setInitialState(data);
 
     return () => {
       setTeachers([]); //Reset the teachers again to empty array
       setTeachersFiltered([]);
       setFocus();
+      setCategories([]); //not sure about this think returns back to normal
+      setTeachersCtg(data);
+      setActive(); //same as above and below return to inital/empty states when finished
+      setInitialState();
     };
   }, []); //Not sure why empty array needs to be here something to do with no call back from =>
 
@@ -52,6 +67,21 @@ const TeacherContainer = () => {
     setFocus(false);
   };
 
+  //Category method to filter
+  const changeCtg = (ctg) => {
+    {
+      ctg == "all"
+        ? [setTeachersCtg(initialState), setActive(true)] //show al
+        : //if not all categories
+          [
+            setTeachersCtg(
+              teachers.filter((i) => i.category.$oid == ctg),
+              setActive(true)
+            ),
+          ];
+    }
+  };
+
   return (
     //Everything goes inside native-base container
     <Container>
@@ -65,40 +95,57 @@ const TeacherContainer = () => {
           />
 
           {focus == true ? (
-            <Icon onPress ={onBlur} name = "ios-close" /> //Think function for clicking the little x to bring back to main list
-
-          ) : null 
-          }
-
+            <Icon onPress={onBlur} name="ios-close" /> //Think function for clicking the little x to bring back to main list
+          ) : null}
         </Item>
       </Header>
 
       {focus == true ? ( //If the focus above is true then we do this else, we return the flat list below of all proucts
-        <SearchedTeacher
-        teachersFiltered = {teachersFiltered}
+        <SearchedTeacher teachersFiltered={teachersFiltered} />
+      ) : (
+        //else part here is rendering the flat list
+        //Needs to be a scroll view so users can scroll page. Flat list however can't be done within scroll view
+        //Banner below is imported above and created in shared folder
+        <ScrollView>
+          <View>
+            <View // <Banner /> should go inside here but removes the list from the application then and just shows the banner?
+            >
+              <Banner />
+            </View>
 
-        />
-      ) 
-      //else part here is rendering the flat list
-      : ( 
-        <View styles={styles.container}>
-          <Text> Teacher Container List loading </Text>
+            <View //should be <CategoryFilter but having import issues?
+            >
+              <CategoryFilter
+                categories={categories}
+                categoryFilter={changeCtg}
+                teachersCtg={teachersCtg}
+                active={active}
+                setActive={setActive}
+              />
+            </View>
+            {teachersCtg.length > 0 ? (     //if teacherCtg list has more than 1 we will render list
+            <View style={styles.listContainer}>
+              {teachersCtg.map((item)=> {
+                return (
+                  <TeacherList //pass props to it/ same as flat list but rendering it using map isntead
+                    key = {item.name}
+                    item = {item}  
 
-          <View style={styles.listContainer}>
-            <FlatList
-              //horizontal
-              data={teachers}
-              numColumns={2} //numColumns does not support horizontal error,...changes layout?? was = {2}
-              renderItem={({ item }) => (
-                <TeacherList //renderItem function here renders the full teacherList js created
-                  key={item.id}
-                  item={item}
-                />
-              )}
-              keyExtractor={item.name}
-            />
+                  />
+                )
+              })}       
+            </View>
+            ): (      //if no product list simple view
+                <View style = {[styles.center, {height: '40%'}]}> 
+                <Text> No Teachers Found </Text>
+
+                  </View>
+
+
+            )}
+            
           </View>
-        </View>
+        </ScrollView>
       )}
     </Container>
   );
