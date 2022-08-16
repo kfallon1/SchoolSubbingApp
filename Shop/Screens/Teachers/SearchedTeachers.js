@@ -12,7 +12,10 @@ const SearchedTeacher = (props) => {
       {teachersFiltered.length > 0 ? ( //search through all of the teachersFiltered array
         teachersFiltered.map((item) => (
           <ListItem
-            //onPress(Navigation)
+          //onPress is what happens when press on item coming up on search list.. navigate to Teacher Detail in HomeNavigator & item:item is route parimeter
+            onPress= {() => {
+              props.navigation.navigate("Teacher Details", {item:item}) //make sure matched whats in navigate file 'TeacherDetails'
+            }}
             key={item._id.$oid}
             avatar //not sure what this is or does
           >
@@ -21,7 +24,7 @@ const SearchedTeacher = (props) => {
                 source={{
                   uri: item.image
                     ? item.image
-                    : "https://cdn.pixabay.com/photo/2012/04/01/17/29/box-23649_960_720.png",
+                    : "https://www.civictheatre.ie/wp-content/uploads/2016/05/blank-profile-picture-973460_960_720.png",
                 }}
               />
             </Left>

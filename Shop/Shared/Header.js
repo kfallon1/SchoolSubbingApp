@@ -7,11 +7,11 @@ import { StyleSheet, Image, View, SafeAreaView } from "react-native"; //safearea
 //Same pattern create the const and return the UI/user interface
 const Header = () => {
   return (
-    <SafeAreaView style={styles.Header}>
+    <SafeAreaView style={styles.header}>
       <Image //The image here is the logo of the
         source={require("../assets/SchoolStaffClipart.jpg")}
         resizeMode="contain"
-        Style={{ height: 50 }}
+        style={{ height: 50 }} //make sure this is style not Style!!
       />
     </SafeAreaView>
   );

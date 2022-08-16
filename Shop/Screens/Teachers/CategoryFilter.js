@@ -30,7 +30,7 @@ const CategoryFilter = (props) => {
         
         {props.categories.map((item) => (
           <TouchableOpacity
-            key={item._id.$oid}
+            key={item._id.$oid} 
             onPress={() => {
               props.categoryFilter(item._id),
                 props.setActive(props.categories.indexOf(item));
@@ -57,7 +57,7 @@ const CategoryFilter = (props) => {
 const styles = StyleSheet.create({
   center: {
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center", 
   },
   active: {
     backgroundColor: "#03bafc",

@@ -21,7 +21,7 @@ const teacherCategories = require("../../assets/data/categories.json"); //catego
 var { height } = Dimensions.get("window");
 
 //This const is rendered in the main app.js file as a retun function. Guess builds the whole screen and it's function?!
-const TeacherContainer = () => {
+const TeacherContainer = (props) => {
   const item = {}; //This solves can't find variable item
   const [teachers, setTeachers] = useState([]); //Setting the state of the teachers and putting them in an array
   const [teachersFiltered, setTeachersFiltered] = useState([]); //Functionality for search teacher This created before TeacherSearched.js not sure about useState() think its created here to be used as props in const
@@ -101,7 +101,9 @@ const TeacherContainer = () => {
       </Header>
 
       {focus == true ? ( //If the focus above is true then we do this else, we return the flat list below of all proucts
-        <SearchedTeacher teachersFiltered={teachersFiltered} />
+        <SearchedTeacher 
+        navigation = {props.navigation} //passes navigation props to searched product
+        teachersFiltered={teachersFiltered} />
       ) : (
         //else part here is rendering the flat list
         //Needs to be a scroll view so users can scroll page. Flat list however can't be done within scroll view
@@ -109,7 +111,7 @@ const TeacherContainer = () => {
         <ScrollView>
           <View>
             <View // <Banner /> should go inside here but removes the list from the application then and just shows the banner?
-            >
+            > 
               <Banner />
             </View>
 
@@ -123,27 +125,24 @@ const TeacherContainer = () => {
                 setActive={setActive}
               />
             </View>
-            {teachersCtg.length > 0 ? (     //if teacherCtg list has more than 1 we will render list
-            <View style={styles.listContainer}>
-              {teachersCtg.map((item)=> {
-                return (
-                  <TeacherList //pass props to it/ same as flat list but rendering it using map isntead
-                    key = {item.name}
-                    item = {item}  
-
-                  />
-                )
-              })}       
-            </View>
-            ): (      //if no product list simple view
-                <View style = {[styles.center, {height: '40%'}]}> 
+            {teachersCtg.length > 0 ? ( //if teacherCtg list has more than 1 we will render list
+              <View style={styles.listContainer}>
+                {teachersCtg.map((item) => {
+                  return (
+                    <TeacherList //pass props to it/ same as flat list but rendering it using map isntead
+                      navigation={props.navigation} //coming from navigation but not sure why or what
+                      key={item.name}
+                      item={item}
+                    />
+                  );
+                })}
+              </View>
+            ) : (
+              //if no product list simple view
+              <View style={[styles.center, { height: "40%" }]}>
                 <Text> No Teachers Found </Text>
-
-                  </View>
-
-
+              </View>
             )}
-            
           </View>
         </ScrollView>
       )}
@@ -179,6 +178,6 @@ soloution is to copy in their package j.son file.......
 Module parse failed: Unexpected token (13:12)
 You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loader
 
-
+Check this but think list doens't render unless this is saved AFTER filter method? 
 
 */
