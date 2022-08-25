@@ -14,6 +14,10 @@ import SearchedTeacher from "./SearchedTeachers";
 import Banner from "../../Shared/Banner"; //WORKS BUT LOSE THE TEACHER LIST WHEN I USE IT
 import CategoryFilter from "./CategoryFilter"; //NOT WORKING EITHER? RENDER METHOD/IMPORT ERROR?
 
+import baseURL from '../../assets/common/baseUrl'
+
+import axios from 'axios'//axios handles HTTP Requests 
+
 //This imports the teachers/data from the JSON file in assets
 const data = require("../../assets/data/teachers.json");
 const teacherCategories = require("../../assets/data/categories.json"); //categories import
@@ -33,12 +37,29 @@ const TeacherContainer = (props) => {
 
   //Use effect is the function to fetch the data/teachers from the file which is called data
   useEffect(() => {
-    setTeachers(data);
-    setTeachersFiltered(data);
+    //setTeachers(data);
+    //setTeachersFiltered(data);
     setFocus(false); //initial focus state is false so only used when search occurs
     setCategories(teacherCategories); //when renders use the categories from categoriy file above
     setActive(-1); //not sure why or what this is
-    setInitialState(data);
+    //setInitialState(data);
+
+    //our call to DB, axios handles HTTP calls
+    axios
+    .get(`${baseURL}teachers`) //backticks required for string literal?. GET baseurl/teachers from server
+    .then((res) => {
+      console.log("I am following the URI to the DB!!")
+      setTeachers(res.data); 
+      setTeachersFiltered(res.data); 
+      setTeachersCtg(res.data);  
+      setInitialState(res.data); 
+    })
+
+    .catch((error) => {
+      console.log('Api call error')
+    })
+
+
 
     return () => {
       setTeachers([]); //Reset the teachers again to empty array
