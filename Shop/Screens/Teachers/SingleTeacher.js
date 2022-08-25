@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import { Left, Right, Container, H1, Content } from "native-base";
 
+import { connect } from "react-redux"; //connection part
+import * as actions from "../../Redux/Actions/cartActions"; //immport the redux actions (add/remove/clear cart)
+
 //props come from TeacherList
 const SingleTeacher = (props) => {
   //Maybe ask Sam to go over what exactly happening here vs Java
@@ -57,12 +60,24 @@ const SingleTeacher = (props) => {
         </Left>
 
         <Right>
-          <Button title = 'Book' />
+          <Button
+            title="Book"
+            //onPressEvent calling the function below to add item to cart/booking
+            onPress={() => props.addItemToCart(item)} //rem item vs product. Item function within JS product declared/made by me
+          />
         </Right>
       </View>
     </Container>
   );
 };
+
+
+const mapToDispatchToProps = (dispatch) => {
+  return {
+      addItemToCart: (teacher) => 
+          dispatch(actions.addToCart({quantity: 1, teacher}))
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -107,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 //export this and will be used in Teacher List within touchable opacity event when teacher is presssed
-export default SingleTeacher;
+export default connect(null, mapToDispatchToProps)(SingleTeacher); //review the connect part vs old export default

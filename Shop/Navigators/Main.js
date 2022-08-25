@@ -7,6 +7,8 @@ import Icon from "react-native-vector-icons/FontAwesome"; //imported using termi
 
 //import Stacks(Routes?)
 import HomeNavigator from "./HomeNavigator";  //called in the components...
+import BookingNavigator from "./BookingNavigator";
+import CartIcon from '../Shared/CartIcon'; //import CartIcon which is used on the cart to display no of items/bookings
 
 
 
@@ -47,16 +49,20 @@ const Main = () => {
         
       <Tab.Screen //The Cart/Booking Tab at the Bottom
         name="Booking"
-        component={HomeNavigator} //will be coming back to this fill in what is when there
+        component={BookingNavigator} //will be coming back to this fill in what is when there
         options={{
           tabBarIcon: (
             { color } //pass the color and an error function
-          ) => (
-            <Icon
+          ) => ( 
+              <View>
+                <Icon
               name="handshake-o" //name that comes from font-awesome library above, found online
               color={color}
               size={30}
             />
+            <CartIcon //imported abvove and created to render num of items/bookings in cart
+            />
+              </View>
           ),
         }}
       />

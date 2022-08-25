@@ -6,7 +6,7 @@ import {
   FlatList,
   Dimensions,
   ScrollView,
-} from "react-native"; //FlatList used to render list
+} from "react-native"; //FlatList used to render list 
 import { Container, Header, Icon, Item, Input, Text } from "native-base";
 
 import TeacherList from "./TeacherList";
@@ -101,9 +101,10 @@ const TeacherContainer = (props) => {
       </Header>
 
       {focus == true ? ( //If the focus above is true then we do this else, we return the flat list below of all proucts
-        <SearchedTeacher 
-        navigation = {props.navigation} //passes navigation props to searched product
-        teachersFiltered={teachersFiltered} />
+        <SearchedTeacher
+          navigation={props.navigation} //passes navigation props to searched product
+          teachersFiltered={teachersFiltered}
+        />
       ) : (
         //else part here is rendering the flat list
         //Needs to be a scroll view so users can scroll page. Flat list however can't be done within scroll view
@@ -111,12 +112,12 @@ const TeacherContainer = (props) => {
         <ScrollView>
           <View>
             <View // <Banner /> should go inside here but removes the list from the application then and just shows the banner?
-            > 
+            >
               <Banner />
             </View>
 
             <View //should be <CategoryFilter but having import issues?
-            >
+            > 
               <CategoryFilter
                 categories={categories}
                 categoryFilter={changeCtg}
@@ -142,10 +143,10 @@ const TeacherContainer = (props) => {
               <View style={[styles.center, { height: "40%" }]}>
                 <Text> No Teachers Found </Text>
               </View>
-            )}
+            )} 
           </View>
         </ScrollView>
-      )}
+      )} 
     </Container>
   );
 };

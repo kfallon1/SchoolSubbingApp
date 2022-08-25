@@ -14,7 +14,7 @@ const CategoryFilter = (props) => {
         <TouchableOpacity
           key={1}
           onPress={() => {
-            props.categoryFilter("all"), props.setActive(-1); //-1 I think sets initial state (inavtive?)
+            props.ategoryFilter("all"), props.setActive(-1); //-1 I think sets initial state (inavtive?)
           }}
         >
           <Badge
